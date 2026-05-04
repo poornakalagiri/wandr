@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Create Account — Wandr</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:#faf9f6}
+
+/* LEFT PANEL */
+.left{
+  background:
+    linear-gradient(135deg,rgba(13,17,23,0.80) 0%,rgba(201,168,76,0.35) 100%),
+    url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200') center/cover no-repeat;
+  display:flex;flex-direction:column;justify-content:center;padding:60px;color:white;
+}
+.logo{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;margin-bottom:48px}
+.logo span{color:#f0d98a}
+.left h2{font-family:'Playfair Display',serif;font-size:2.4rem;line-height:1.2;margin-bottom:18px}
+.left h2 em{color:#f0d98a;font-style:italic}
+.left p{opacity:0.82;font-size:1rem;line-height:1.75;max-width:380px;margin-bottom:40px}
+.perks{display:flex;flex-direction:column;gap:14px}
+.perk{display:flex;align-items:center;gap:14px;font-size:0.9rem;opacity:0.92}
+.perk-icon{width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.badge-free{display:inline-block;background:rgba(201,168,76,0.3);border:1px solid rgba(201,168,76,0.5);color:#f0d98a;padding:4px 14px;border-radius:40px;font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px}
+
+/* RIGHT PANEL */
+.right{display:flex;align-items:center;justify-content:center;padding:40px;overflow-y:auto}
+.box{width:100%;max-width:440px}
+.box-title{font-family:'Playfair Display',serif;font-size:1.9rem;margin-bottom:6px}
+.box-sub{color:#7a7267;font-size:0.9rem;line-height:1.6;margin-bottom:28px}
+
+/* FORM */
+.form-row{display:flex;gap:14px}
+.form-row .form-group{flex:1}
+.form-group{margin-bottom:16px}
+.label{display:block;font-size:0.82rem;font-weight:600;margin-bottom:6px;color:#0d1117}
+.input-wrap{position:relative}
+.icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:0.95rem;color:#a09890;pointer-events:none}
+.input{
+  width:100%;padding:12px 16px 12px 42px;border:2px solid #e8e0d0;
+  border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.93rem;
+  color:#0d1117;background:white;outline:none;transition:border-color 0.2s;
+}
+.input.plain{padding-left:16px}
+.input:focus{border-color:#2a7c6f}
+.input.err{border-color:#b85c38}
+.input-right{position:relative}
+.input-right .input{padding-right:60px;padding-left:16px}
+.show-btn{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#7a7267;font-size:0.8rem;font-weight:600;font-family:'DM Sans',sans-serif}
+.show-btn:hover{color:#0d1117}
+.hint{font-size:0.76rem;color:#a09890;margin-top:5px}
+.hint.ok{color:#2a7c6f}
+.hint.bad{color:#b85c38}
+
+/* PASSWORD STRENGTH */
+.pw-bar{height:4px;background:#e8e0d0;border-radius:2px;margin-top:8px;overflow:hidden}
+.pw-fill{height:100%;border-radius:2px;transition:all 0.3s;width:0}
+
+/* TERMS */
+.terms-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:20px}
+.terms-row input{width:17px;height:17px;margin-top:2px;accent-color:#2a7c6f;cursor:pointer;flex-shrink:0}
+.terms-row label{font-size:0.84rem;color:#7a7267;line-height:1.55;cursor:pointer}
+.terms-row label a{color:#2a7c6f}
+
+/* ALERTS */
+.alert{padding:12px 16px;border-radius:10px;font-size:0.86rem;margin-bottom:18px;display:none;align-items:flex-start;gap:10px}
+.alert.show{display:flex}
+.alert-err{background:#fdeee8;border:1px solid #f5c4b0;color:#8b3a20}
+.alert-ok{background:#e8f5f0;border:1px solid #9fd4c0;color:#1a5c48}
+
+/* SUBMIT */
+.submit{
+  width:100%;padding:13px;background:#0d1117;color:white;border:none;
+  border-radius:10px;font-size:0.97rem;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:background 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.submit:hover{background:#2a7c6f}
+.submit:disabled{opacity:0.55;cursor:not-allowed}
+.spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,0.35);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading .btn-text{display:none}
+.loading .spinner{display:block}
+
+.switch{text-align:center;margin-top:18px;font-size:0.89rem;color:#7a7267}
+.switch a{color:#2a7c6f;font-weight:600;cursor:pointer;text-decoration:none}
+.switch a:hover{text-decoration:underline}
+.back{text-align:center;margin-top:12px}
+.back a{color:#a09890;font-size:0.83rem;text-decoration:none}
+.back a:hover{color:#7a7267}
+
+@media(max-width:800px){
+  body{grid-template-columns:1fr}
+  .left{display:none}
+  .right{padding:36px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- LEFT -->
+<div class="left">
+  <div class="logo">Wandr<span>.</span></div>
+  <div class="badge-free">🆓 Free Forever</div>
+  <h2>Join thousands of <em>smart travelers</em></h2>
+  <p>Create your free Wandr account and start planning unforgettable trips with AI-powered itineraries tailored just for you.</p>
+  <div class="perks">
+    <div class="perk"><div class="perk-icon">🗺️</div><span>Save unlimited AI-generated itineraries</span></div>
+    <div class="perk"><div class="perk-icon">🌍</div><span>Access all 50+ destinations instantly</span></div>
+    <div class="perk"><div class="perk-icon">💰</div><span>Budget, Mid-Range & Luxury travel tiers</span></div>
+    <div class="perk"><div class="perk-icon">🔒</div><span>Your data is private and secure</span></div>
+    <div class="perk"><div class="perk-icon">📱</div><span>Works on mobile, tablet and desktop</span></div>
+  </div>
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+  <div class="box">
+    <h1 class="box-title">Create account 🌍</h1>
+    <p class="box-sub">Join Wandr for free. It only takes 30 seconds.</p>
+
+    <div class="alert alert-err" id="err-box">
+      <span>⚠️</span>
+      <span id="err-msg">Please check your details and try again.</span>
+    </div>
+    <div class="alert alert-ok" id="ok-box">
+      <span>🎉</span>
+      <span id="ok-msg">Account created! Welcome to Wandr! Redirecting...</span>
+    </div>
+
+    <!-- Name row -->
+    <div class="form-row">
+      <div class="form-group">
+        <label class="label" for="fname">First Name *</label>
+        <input class="input plain" type="text" id="fname" placeholder="Jane" autocomplete="given-name"/>
+      </div>
+      <div class="form-group">
+        <label class="label" for="lname">Last Name</label>
+        <input class="input plain" type="text" id="lname" placeholder="Smith" autocomplete="family-name"/>
+      </div>
+    </div>
+
+    <!-- Username -->
+    <div class="form-group">
+      <label class="label" for="username">Username *</label>
+      <div class="input-wrap">
+        <span class="icon" style="font-style:normal;font-weight:600;font-size:0.9rem">@</span>
+        <input class="input" type="text" id="username" placeholder="janesmith" autocomplete="username" oninput="checkUser(this)"/>
+      </div>
+      <div class="hint" id="user-hint">Only letters, numbers and underscores</div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label class="label" for="email">Email Address *</label>
+      <div class="input-wrap">
+        <span class="icon">✉️</span>
+        <input class="input" type="email" id="email" placeholder="jane@example.com" autocomplete="email"/>
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label class="label" for="password">Password * <span style="font-weight:400;color:#a09890">(min. 6 characters)</span></label>
+      <div class="input-right">
+        <input class="input" type="password" id="password" placeholder="Create a strong password" autocomplete="new-password" oninput="checkPw(this.value)"/>
+        <button class="show-btn" onclick="togglePw('password','show1')" type="button" id="show1">Show</button>
+      </div>
+      <div class="pw-bar"><div class="pw-fill" id="pw-fill"></div></div>
+      <div class="hint" id="pw-hint">Enter a password</div>
+    </div>
+
+    <!-- Confirm password -->
+    <div class="form-group">
+      <label class="label" for="confirm">Confirm Password *</label>
+      <div class="input-right">
+        <input class="input" type="password" id="confirm" placeholder="Repeat your password" autocomplete="new-password"/>
+        <button class="show-btn" onclick="togglePw('confirm','show2')" type="button" id="show2">Show</button>
+      </div>
+    </div>
+
+    <!-- Terms -->
+    <div class="terms-row">
+      <input type="checkbox" id="terms"/>
+      <label for="terms">
+        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        I'm happy to receive travel tips and updates from Wandr.
+      </label>
+    </div>
+
+    <!-- Submit -->
+    <button class="submit" id="submit-btn" onclick="doRegister()">
+      <span class="btn-text">→ Create My Account</span>
+      <div class="spinner"></div>
+    </button>
+
+    <p class="switch">Already have an account? <a href="login.html">Sign in →</a></p>
+    <p class="back"><a href="index.html">← Back to Home</a></p>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8000/api';
+
+function togglePw(id, btnId) {
+  const inp = document.getElementById(id);
+  const btn = document.getElementById(btnId);
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = 'Hide'; }
+  else { inp.type = 'password'; btn.textContent = 'Show'; }
+}
+
+function checkUser(inp) {
+  const v = inp.value.trim();
+  const hint = document.getElementById('user-hint');
+  if (!v) { hint.textContent = 'Only letters, numbers and underscores'; hint.className = 'hint'; return; }
+  if (v.length < 3) { hint.textContent = '⚠️ At least 3 characters required'; hint.className = 'hint bad'; return; }
+  if (!/^[a-zA-Z0-9_]+$/.test(v)) { hint.textContent = '⚠️ Only letters, numbers, underscores'; hint.className = 'hint bad'; return; }
+  hint.textContent = '✓ Username looks good'; hint.className = 'hint ok';
+}
+
+function checkPw(pw) {
+  const fill  = document.getElementById('pw-fill');
+  const hint  = document.getElementById('pw-hint');
+  let score = 0;
+  if (pw.length >= 6)             score++;
+  if (pw.length >= 10)            score++;
+  if (/[A-Z]/.test(pw))          score++;
+  if (/[0-9]/.test(pw))          score++;
+  if (/[^A-Za-z0-9]/.test(pw))   score++;
+  const levels = [
+    {w:'0%',  bg:'transparent', text:'Enter a password',    cls:'hint'},
+    {w:'20%', bg:'#b85c38',     text:'Very weak',           cls:'hint bad'},
+    {w:'40%', bg:'#c9a84c',     text:'Weak',                cls:'hint bad'},
+    {w:'60%', bg:'#c9a84c',     text:'Fair',                cls:'hint'},
+    {w:'80%', bg:'#3aa08f',     text:'Good',                cls:'hint ok'},
+    {w:'100%',bg:'#2a7c6f',     text:'Strong ✓',            cls:'hint ok'},
+  ];
+  const l = levels[Math.min(score, 5)];
+  fill.style.width    = l.w;
+  fill.style.background = l.bg;
+  hint.textContent    = pw ? l.text : 'Enter a password';
+  hint.className      = l.cls;
+}
+
+function showErr(msg) {
+  document.getElementById('err-msg').textContent = msg;
+  document.getElementById('err-box').classList.add('show');
+  document.getElementById('ok-box').classList.remove('show');
+}
+function showOk(msg) {
+  document.getElementById('ok-msg').textContent = msg || 'Account created! Welcome to Wandr! Redirecting...';
+  document.getElementById('ok-box').classList.add('show');
+  document.getElementById('err-box').classList.remove('show');
+}
+function setLoading(on) {
+  const btn = document.getElementById('submit-btn');
+  btn.classList.toggle('loading', on);
+  btn.disabled = on;
+}
+
+async function doRegister() {
+  const fname    = document.getElementById('fname').value.trim();
+  const lname    = document.getElementById('lname').value.trim();
+  const username = document.getElementById('username').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const confirm  = document.getElementById('confirm').value;
+  const terms    = document.getElementById('terms').checked;
+
+  document.getElementById('err-box').classList.remove('show');
+  document.getElementById('ok-box').classList.remove('show');
+
+  if (!fname)            { showErr('First name is required.'); return; }
+  if (!username || username.length < 3) { showErr('Username must be at least 3 characters.'); return; }
+  if (!/^[a-zA-Z0-9_]+$/.test(username)) { showErr('Username can only contain letters, numbers and underscores.'); return; }
+  if (!email || !email.includes('@')) { showErr('Please enter a valid email address.'); return; }
+  if (password.length < 6) { showErr('Password must be at least 6 characters.'); return; }
+  if (password !== confirm) { showErr('Passwords do not match. Please try again.'); return; }
+  if (!terms) { showErr('Please accept the Terms of Service to create your account.'); return; }
+
+  setLoading(true);
+
+  const payload = {
+    email,
+    password,
+    username,
+    full_name: `${fname} ${lname}`.trim()
+  };
+
+  try {
+    const res  = await fetch(`${API}/auth/register`, {
+      method:  'POST',
+      headers: {'Content-Type': 'application/json'},
+      body:    JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showErr(data.detail || 'Registration failed. Please try again.');
+      setLoading(false);
+      return;
+    }
+
+    localStorage.setItem('wandr_token', data.access_token);
+    localStorage.setItem('wandr_user',  JSON.stringify(data.user));
+    showOk(`Welcome to Wandr, ${fname}! 🎉 Redirecting to home...`);
+    setTimeout(() => window.location.href = 'index.html', 1200);
+
+  } catch {
+    // Offline / demo fallback
+    const user = {
+      id:        'user-' + Date.now(),
+      email,
+      username,
+      full_name: `${fname} ${lname}`.trim()
+    };
+    localStorage.setItem('wandr_user',  JSON.stringify(user));
+    localStorage.setItem('wandr_token', 'demo-token');
+    showOk(`Welcome to Wandr, ${fname}! 🎉 (Demo mode — backend offline)`);
+    setTimeout(() => window.location.href = 'index.html', 1200);
+  }
+
+  setLoading(false);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
+</script>
+</body>
+</html>

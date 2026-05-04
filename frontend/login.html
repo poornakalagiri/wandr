@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sign In — Wandr</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:#faf9f6}
+
+/* LEFT PANEL */
+.left{
+  background:
+    linear-gradient(135deg,rgba(13,17,23,0.82) 0%,rgba(42,124,111,0.55) 100%),
+    url('https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1200') center/cover no-repeat;
+  display:flex;flex-direction:column;justify-content:center;padding:60px;color:white;
+}
+.logo{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;margin-bottom:48px}
+.logo span{color:#f0d98a}
+.left h2{font-family:'Playfair Display',serif;font-size:2.6rem;line-height:1.2;margin-bottom:18px}
+.left h2 em{color:#f0d98a;font-style:italic}
+.left p{opacity:0.82;font-size:1rem;line-height:1.75;max-width:380px;margin-bottom:40px}
+.features{display:flex;flex-direction:column;gap:16px}
+.feature{display:flex;align-items:center;gap:14px;font-size:0.92rem;opacity:0.92}
+.feat-icon{width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+
+/* RIGHT PANEL */
+.right{display:flex;align-items:center;justify-content:center;padding:48px 40px;overflow-y:auto}
+.box{width:100%;max-width:420px}
+.box-title{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:8px}
+.box-sub{color:#7a7267;font-size:0.92rem;line-height:1.6;margin-bottom:32px}
+
+/* FORM */
+.form-group{margin-bottom:20px}
+.label{display:block;font-size:0.83rem;font-weight:600;margin-bottom:7px;color:#0d1117}
+.label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.label-row a{font-size:0.8rem;color:#2a7c6f;font-weight:500;cursor:pointer;text-decoration:none}
+.label-row a:hover{text-decoration:underline}
+.input-wrap{position:relative}
+.icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:#a09890;pointer-events:none}
+.input{
+  width:100%;padding:13px 16px 13px 44px;border:2px solid #e8e0d0;
+  border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.96rem;
+  color:#0d1117;background:white;outline:none;transition:border-color 0.2s;
+}
+.input.no-icon{padding-left:16px}
+.input:focus{border-color:#2a7c6f}
+.input.err{border-color:#b85c38}
+.input-right{position:relative}
+.input-right .input{padding-right:64px;padding-left:16px}
+.show-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#7a7267;font-size:0.82rem;font-weight:600;font-family:'DM Sans',sans-serif}
+.show-btn:hover{color:#0d1117}
+
+/* REMEMBER */
+.check-row{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.check-row input{width:17px;height:17px;accent-color:#2a7c6f;cursor:pointer}
+.check-row label{font-size:0.86rem;color:#7a7267;cursor:pointer}
+
+/* ALERTS */
+.alert{padding:13px 16px;border-radius:10px;font-size:0.87rem;margin-bottom:20px;display:none;align-items:flex-start;gap:10px}
+.alert.show{display:flex}
+.alert-err{background:#fdeee8;border:1px solid #f5c4b0;color:#8b3a20}
+.alert-ok{background:#e8f5f0;border:1px solid #9fd4c0;color:#1a5c48}
+
+/* BUTTONS */
+.submit{
+  width:100%;padding:14px;background:#0d1117;color:white;border:none;
+  border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:background 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.submit:hover{background:#2a7c6f}
+.submit:disabled{opacity:0.55;cursor:not-allowed}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.35);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading .btn-text{display:none}
+.loading .spinner{display:block}
+
+.divider{display:flex;align-items:center;gap:12px;margin:22px 0;color:#a09890;font-size:0.82rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#e8e0d0}
+
+.social{
+  width:100%;padding:12px;border:2px solid #e8e0d0;border-radius:10px;
+  background:white;cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:0.9rem;font-weight:500;display:flex;align-items:center;
+  justify-content:center;gap:10px;transition:all 0.2s;color:#0d1117;
+}
+.social:hover{background:#f0ebe0;border-color:#a09890}
+
+.switch{text-align:center;margin-top:22px;font-size:0.9rem;color:#7a7267}
+.switch a{color:#2a7c6f;font-weight:600;cursor:pointer;text-decoration:none}
+.switch a:hover{text-decoration:underline}
+.back{text-align:center;margin-top:14px}
+.back a{color:#a09890;font-size:0.84rem;cursor:pointer;text-decoration:none}
+.back a:hover{color:#7a7267}
+
+@media(max-width:800px){
+  body{grid-template-columns:1fr}
+  .left{display:none}
+  .right{padding:40px 24px}
+}
+</style>
+</head>
+<body>
+
+<!-- LEFT -->
+<div class="left">
+  <div class="logo">Wandr<span>.</span></div>
+  <h2>Welcome back,<br/><em>explorer</em></h2>
+  <p>Sign in to access your saved itineraries, track trips across 50+ destinations and plan your next adventure.</p>
+  <div class="features">
+    <div class="feature"><div class="feat-icon">🗺️</div><span>Access all your saved travel itineraries</span></div>
+    <div class="feature"><div class="feat-icon">💰</div><span>Budget tracking across Budget, Mid & Luxury tiers</span></div>
+    <div class="feature"><div class="feat-icon">🌍</div><span>50+ destinations · 100+ attractions · Interactive maps</span></div>
+    <div class="feature"><div class="feat-icon">✈️</div><span>AI-powered day-by-day trip planning</span></div>
+  </div>
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+  <div class="box">
+    <h1 class="box-title">Sign in 👋</h1>
+    <p class="box-sub">Enter your credentials to access your Wandr account.</p>
+
+    <!-- Error alert -->
+    <div class="alert alert-err" id="err-box">
+      <span>⚠️</span>
+      <span id="err-msg">Invalid email or password. Please try again.</span>
+    </div>
+
+    <!-- Success alert -->
+    <div class="alert alert-ok" id="ok-box">
+      <span>✅</span>
+      <span>Signed in successfully! Redirecting to home...</span>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label class="label" for="email">Email Address</label>
+      <div class="input-wrap">
+        <span class="icon">✉️</span>
+        <input class="input" type="email" id="email" placeholder="you@example.com" autocomplete="email"/>
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <div class="label-row">
+        <label class="label" style="margin:0" for="password">Password</label>
+        <a href="#">Forgot password?</a>
+      </div>
+      <div class="input-right">
+        <input class="input" type="password" id="password" placeholder="Enter your password" autocomplete="current-password"/>
+        <button class="show-btn" onclick="togglePw()" type="button" id="show-btn">Show</button>
+      </div>
+    </div>
+
+    <!-- Remember me -->
+    <div class="check-row">
+      <input type="checkbox" id="remember" checked/>
+      <label for="remember">Keep me signed in for 7 days</label>
+    </div>
+
+    <!-- Submit -->
+    <button class="submit" id="submit-btn" onclick="doLogin()">
+      <span class="btn-text">→ Sign In</span>
+      <div class="spinner"></div>
+    </button>
+
+    <div class="divider">or</div>
+
+    <button class="social" onclick="demoLogin()">
+      🌍 &nbsp; Continue as Demo User (no account needed)
+    </button>
+
+    <p class="switch">Don't have an account? <a href="register.html">Create one free →</a></p>
+    <p class="back"><a href="index.html">← Back to Home</a></p>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8000/api';
+
+function togglePw() {
+  const inp = document.getElementById('password');
+  const btn = document.getElementById('show-btn');
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = 'Hide'; }
+  else { inp.type = 'password'; btn.textContent = 'Show'; }
+}
+
+function showErr(msg) {
+  document.getElementById('err-msg').textContent = msg;
+  document.getElementById('err-box').classList.add('show');
+  document.getElementById('ok-box').classList.remove('show');
+}
+function showOk() {
+  document.getElementById('err-box').classList.remove('show');
+  document.getElementById('ok-box').classList.add('show');
+}
+
+function setLoading(on) {
+  const btn = document.getElementById('submit-btn');
+  btn.classList.toggle('loading', on);
+  btn.disabled = on;
+}
+
+async function doLogin() {
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  document.getElementById('err-box').classList.remove('show');
+  document.getElementById('ok-box').classList.remove('show');
+
+  if (!email) { showErr('Please enter your email address.'); return; }
+  if (!email.includes('@')) { showErr('Please enter a valid email address.'); return; }
+  if (!password) { showErr('Please enter your password.'); return; }
+
+  setLoading(true);
+
+  try {
+    const res  = await fetch(`${API}/auth/login`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email, password})
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showErr(data.detail || 'Invalid email or password. Please try again.');
+      setLoading(false);
+      return;
+    }
+
+    localStorage.setItem('wandr_token', data.access_token);
+    localStorage.setItem('wandr_user', JSON.stringify(data.user));
+    showOk();
+    setTimeout(() => window.location.href = 'index.html', 1000);
+
+  } catch {
+    // Demo / offline fallback
+    if (password.length >= 4) {
+      const user = {id:'demo', email, username: email.split('@')[0], full_name: email.split('@')[0]};
+      localStorage.setItem('wandr_user', JSON.stringify(user));
+      localStorage.setItem('wandr_token', 'demo-token');
+      showOk();
+      setTimeout(() => window.location.href = 'index.html', 900);
+    } else {
+      showErr('Invalid email or password. Please try again.');
+    }
+  }
+
+  setLoading(false);
+}
+
+function demoLogin() {
+  const user = {id:'demo', email:'demo@wandr.com', username:'traveler', full_name:'Demo Traveler'};
+  localStorage.setItem('wandr_user', JSON.stringify(user));
+  localStorage.setItem('wandr_token', 'demo-token');
+  window.location.href = 'index.html';
+}
+
+// Enter key
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+</script>
+</body>
+</html>
