@@ -204,7 +204,9 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;display:grid;grid-templat
 </div>
 
 <script>
-const API = 'http://localhost:8000/api';
+const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+  ? 'http://localhost:8000/api' 
+  : 'https://wandr-backend.onrender.com/api'; // Or use relative '/api' if hosted together
 
 function togglePw(id, btnId) {
   const inp = document.getElementById(id);

@@ -1,0 +1,27 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: wandr-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: wandr-db
+          property: connectionString
+      - key: MONGODB_URI
+        sync: false # You must set this manually in the Render dashboard!
+
+  # Frontend Static Site
+  - type: web
+    name: wandr-frontend
+    env: static
+    buildCommand: ""
+    staticPublishPath: ./frontend
+
+databases:
+  # Managed PostgreSQL Database
+  - name: wandr-db
+    databaseName: wandr
+    user: wandr_user
